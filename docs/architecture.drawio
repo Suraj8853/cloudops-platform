@@ -1,0 +1,33 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Page-1" id="NuauoIh5wnRPSWxORAIm">
+    <mxGraphModel dx="1264" dy="804" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object label="VPC-10.0.0.0/16&lt;div&gt;&lt;br&gt;&lt;/div&gt;" id="Cfq5f1r6Z9_QiibtyZ9J-2">
+          <mxCell parent="1" style="sketch=0;outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;direction=east;" vertex="1">
+            <mxGeometry height="640" width="660" x="60" y="60" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="Cfq5f1r6Z9_QiibtyZ9J-3" parent="1" style="rounded=1;arcSize=10;dashed=1;strokeColor=#F59D56;fillColor=none;gradientColor=none;dashPattern=8 4;strokeWidth=2;" value="ap-south-1a" vertex="1">
+          <mxGeometry height="500" width="250" x="80" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Cfq5f1r6Z9_QiibtyZ9J-5" parent="1" style="rounded=1;arcSize=10;dashed=1;strokeColor=#F59D56;fillColor=none;gradientColor=none;dashPattern=8 4;strokeWidth=2;" value="ap-south-1b" vertex="1">
+          <mxGeometry height="500" width="250" x="410" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="Cfq5f1r6Z9_QiibtyZ9J-6" parent="1" style="sketch=0;outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" value="Public&lt;div&gt;Subnet&lt;/div&gt;&lt;div&gt;10.0.1.0&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="190" x="100" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="Cfq5f1r6Z9_QiibtyZ9J-7" parent="1" style="sketch=0;outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" value="Public&lt;div&gt;Subnet&lt;/div&gt;&lt;div&gt;10.0.2.0&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="190" x="425" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="Cfq5f1r6Z9_QiibtyZ9J-9" parent="1" style="sketch=0;outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" value="Private&lt;div&gt;Subnet&lt;/div&gt;&lt;div&gt;10.0.3.0&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="190" x="100" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="Cfq5f1r6Z9_QiibtyZ9J-10" parent="1" style="sketch=0;outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet;strokeColor=#879196;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#879196;dashed=0;" value="Private&lt;div&gt;Subnet&lt;/div&gt;&lt;div&gt;10.0.4.0&lt;/div&gt;" vertex="1">
+          <mxGeometry height="160" width="190" x="430" y="410" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
