@@ -21,3 +21,13 @@ module "iam" {
   aws_account_id = "599476212737"
 
 }
+
+module "ecr" {
+source = "../../modules/ecr"
+project_name = "cloudops"
+environment = "dev"
+image_retention_count = 10
+repositories = ["api","dashboard"]
+
+
+}
