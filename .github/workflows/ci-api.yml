@@ -76,8 +76,6 @@ jobs:
           docker build -t $ECR_REPOSITORY:${{ github.sha }} . 
           docker tag $ECR_REPOSITORY:${{ github.sha }} \
           $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }} 
-          docker tag $ECR_REPOSITORY:${{ github.sha }} \
-          $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
       - name: Run Trivy Scan
         uses: aquasecurity/trivy-action@master
         with:
@@ -88,7 +86,6 @@ jobs:
       - name: push to ECR
         run: |
           docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
           
 
   
