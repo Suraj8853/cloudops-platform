@@ -39,7 +39,7 @@ jobs:
   build-and-push:
     name: build and push the image to ECR_REPOSITORY
     needs: lint 
-    uses: .github/workflows/resuable-docker-push.yaml
+    uses: ./.github/workflows/resuable-docker-push.yaml
     with:
       service-name: 'dashboard'
       ecr-repo: 'cloudops-dev-dashboard'

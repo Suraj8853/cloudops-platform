@@ -55,7 +55,7 @@ jobs:
   build-and-push:
     name: build and push to ECR 
     needs: test
-    uses: '.github/workflows/resuable-docker.push.yaml'
+    uses: ./.github/workflows/resuable-docker.push.yaml
     with:
       service-name: 'api'
       ecr-repo: 'cloudops-dev-api'
