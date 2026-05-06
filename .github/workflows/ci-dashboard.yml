@@ -38,36 +38,14 @@ jobs:
 
   build-and-push:
     name: build and push the image to ECR_REPOSITORY
-    runs-on: ubuntu-latest
     needs: lint 
-    permissions:
-      id-token: write
-      contents: read
-    steps:
-      - name: checkout code
-        uses: actions/checkout@v4
-      - name: Configure AWS credentials 
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::599476212737:role/cloudops-dev-github-actions-role
-          aws-region: ap-south-1
-      - name: login to aws 
-        uses: aws-actions/amazon-ecr-login@v2
-      - name: build the docker image
-        working-directory: apps/dashboard/
-        run: |
-          docker build -t $ECR_REPOSITORY:${{ github.sha }} .
-          docker tag $ECR_REPOSITORY:${{ github.sha }} \
-          $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
-      - name: run the trivy Scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-          format: table
-          exit-code: '1'
-          severity: CRITICAL
-      - name: push the image to ECR
-        run: |
-          docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${{ github.sha }}
+    uses: .github/workflows/resuable-docker-push.yaml
+    with:
+      service-name: 'dashboard'
+      ecr-repo: 'cloudops-dev-dashboard'
+      dockerfile-path: 'apps/dashboard'
+      secrets: inherit
+   
+
           
         
