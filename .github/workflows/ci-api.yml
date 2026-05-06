@@ -60,7 +60,7 @@ jobs:
       service-name: 'api'
       ecr-repo: 'cloudops-dev-api'
       dockerfile-path: 'apps/api'
-    secrets: inherit
+
           
 
   

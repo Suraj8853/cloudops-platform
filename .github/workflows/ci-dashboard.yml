@@ -44,7 +44,6 @@ jobs:
       service-name: 'dashboard'
       ecr-repo: 'cloudops-dev-dashboard'
       dockerfile-path: 'apps/dashboard'
-      secrets: inherit
    
 
           
