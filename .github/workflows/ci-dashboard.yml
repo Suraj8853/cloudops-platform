@@ -35,7 +35,7 @@ jobs:
       - name: run the lint
         working-directory: apps/dashboard/
         run: npm run lint --if-present
-
+  
   build-and-push:
     name: build and push the image to ECR_REPOSITORY
     needs: lint 

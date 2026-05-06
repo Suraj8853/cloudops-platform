@@ -36,6 +36,9 @@ jobs:
   test:
     name: Unit Test
     runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        node-version: [18,20]
     needs: lint
     steps:
       - name: checkout code
@@ -43,7 +46,7 @@ jobs:
       - name: setup nodejs
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
           cache-dependency-path: apps/api/package-lock.json
       - name: Install dependencies
@@ -58,8 +61,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    uses: ./.github/workflows/resuable-docker.push.yaml
-    
+    uses: ./.github/workflows/resuable-docker-push.yaml
     with:
       service-name: 'api'
       ecr-repo: 'cloudops-dev-api'
