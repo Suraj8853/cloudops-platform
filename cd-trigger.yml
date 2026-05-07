@@ -1,0 +1,38 @@
+name: CD-trigger -Update Gitops repo 
+on:
+  workflow_run:
+    workflows: ["CI-API service"]
+    types:
+      - completed
+    branches: ["main"]
+jobs:
+  update-gitops:
+    name: update image tag in gitops repo
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: checkout gitops repo
+        uses: actions/checkout@v4
+        with:
+          repository: Suraj8853/cloudops-gitops
+          token: ${{ secrets.GITOPS_PAT }}
+          path: cloudops-gitops 
+      - name: update image tag 
+        run: |
+          cd cloudops-gitops
+          NEW_TAG=${{ github.event.workflow_run.head_sha }}
+          echo "Updating API image to $NEW_TAG"
+          find manifests/api -name "*.yaml" -o -name "*.yml" | \
+          xargs sed -i "s|cloudops-dev-api:.*|cloudops-dev-api:$NEW_TAG|g"
+      - name: Create Pull request 
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITOPS_PAT }}
+          path: cloudops-gitops
+          commit-message: "chore: update api image tag to ${{ github.event.workflow_run.head_sha }}"
+          title: "update api image tag"
+          body: |
+            Automoted PR to update API image tag 
+            New Image: `cloudops-dev-api:${{ github.event.workflow_run.head_sha }}`
+          branch: update-api-image-${{ github.event.workflow_run.head_sha }}
+          base: main
