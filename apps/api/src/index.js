@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
 import { router } from './routes.js'
+import { register } from './metrics.js'
 
 dotenv.config()
 
@@ -20,6 +21,12 @@ app.get('/ready', (req, res) => {
   res.json({ status: 'ready', timestamp: new Date().toISOString() })
 })
 
+// Metrics endpoint — for Prometheus scraping
+app.get('/metrics', async (req, res) => {
+  res.set('Content-Type', register.contentType)
+  res.end(await register.metrics())
+})
+
 // Router AFTER health checks
 app.use('/', router)
 
@@ -28,6 +35,3 @@ app.listen(PORT, () => {
 })
 
 export default app
-
-
-
