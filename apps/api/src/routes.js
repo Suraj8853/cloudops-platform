@@ -1,14 +1,12 @@
 import { Router } from 'express'
 import { nanoid } from 'nanoid'
 import { httpRequestsTotal, redirectDuration } from './metrics.js'
+import redis from './redis.js'
 
 export const router = Router()
 
-// In-memory storage
-const urls = {}
-
 // POST /shorten — create short URL
-router.post('/shorten', (req, res) => {
+router.post('/shorten', async (req, res) => {
   const { url } = req.body
 
   if (!url) {
@@ -17,7 +15,9 @@ router.post('/shorten', (req, res) => {
   }
 
   const shortCode = nanoid(6)
-  urls[shortCode] = url
+  
+  // Store in Redis with 24h expiry
+  await redis.set(shortCode, url, 'EX', 86400)
 
   httpRequestsTotal.inc({ method: 'POST', route: '/shorten', status_code: 201 })
   res.status(201).json({
@@ -28,24 +28,32 @@ router.post('/shorten', (req, res) => {
 })
 
 // GET /:shortCode — redirect to original URL
-router.get('/:shortCode', (req, res) => {
+router.get('/:shortCode', async (req, res) => {
   const { shortCode } = req.params
-  const originalUrl = urls[shortCode]
+
+  const end = redirectDuration.startTimer()
+
+  // Check Redis cache first
+  const originalUrl = await redis.get(shortCode)
 
   if (!originalUrl) {
     httpRequestsTotal.inc({ method: 'GET', route: '/:shortCode', status_code: 404 })
+    end({ status_code: 404 })
     return res.status(404).json({ error: 'Short URL not found' })
   }
 
-  const end = redirectDuration.startTimer()
   httpRequestsTotal.inc({ method: 'GET', route: '/:shortCode', status_code: 302 })
   end({ status_code: 302 })
-
   res.redirect(originalUrl)
 })
 
 // GET /urls — list all URLs (admin)
-router.get('/urls', (req, res) => {
+router.get('/urls', async (req, res) => {
   httpRequestsTotal.inc({ method: 'GET', route: '/urls', status_code: 200 })
+  const keys = await redis.keys('*')
+  const urls = {}
+  for (const key of keys) {
+    urls[key] = await redis.get(key)
+  }
   res.json(urls)
 })
