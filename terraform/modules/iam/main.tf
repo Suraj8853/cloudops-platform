@@ -65,3 +65,65 @@ resource "aws_iam_role_policy" "github_actions" {
 
   })
 }
+
+resource "aws_iam_role_policy" "secrets_manager_access" {
+  name = "${var.project_name}-${var.environment}-secrets-manager-policy"
+  role = var.node_role_name
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
+        Resource = "arn:aws:secretsmanager:${var.aws_region}:${var.aws_account_id}:secret:cloudops/*"
+      }
+    ]
+  })
+}
+
+
+
+resource "aws_iam_role" "external_secrets" {
+  name = "${var.project_name}-${var.environment}-external-secrets-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Federated = "arn:aws:iam::${var.aws_account_id}:oidc-provider/oidc.eks.ap-south-1.amazonaws.com/id/${var.oidc_id}"
+        }
+        Action = "sts:AssumeRoleWithWebIdentity"
+        Condition = {
+          StringEquals = {
+            "oidc.eks.ap-south-1.amazonaws.com/id/${var.oidc_id}:sub" = "system:serviceaccount:external-secrets:external-secrets"
+            "oidc.eks.ap-south-1.amazonaws.com/id/${var.oidc_id}:aud" = "sts.amazonaws.com"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "external_secrets" {
+  name = "${var.project_name}-${var.environment}-external-secrets-policy"
+  role = aws_iam_role.external_secrets.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret"
+        ]
+        Resource = "arn:aws:secretsmanager:ap-south-1:${var.aws_account_id}:secret:cloudops/*"
+      }
+    ]
+  })
+}

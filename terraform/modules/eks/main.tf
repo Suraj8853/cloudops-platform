@@ -40,6 +40,7 @@ resource "aws_security_group" "eks_cluster" {
         protocol = -1
         cidr_blocks = ["0.0.0.0/0"]
     }
+
     tags = {
       Name = "${var.cluster_name}-cluster-sg"
       Environment = var.environment
@@ -58,13 +59,37 @@ vpc_config {
   endpoint_private_access = true
 
 }
+
+encryption_config {
+  provider {
+    key_arn = aws_kms_key.eks_secrets.arn
+    
+  }
+  resources =["secrets"]
+}
+
+enabled_cluster_log_types =  ["api","audit","authenticator","controllerManager","scheduler"]
+
 depends_on = [ aws_iam_role_policy_attachment.eks_cluster_role_policy ]
+
 tags = {
     Name = var.cluster_name
     Environment = var.environment
 }
 
   
+}
+
+
+resource "aws_eks_addon" "cloudwatch_observability" {
+  cluster_name = aws_eks_cluster.main.name
+  addon_name = "amazon-cloudwatch-observability"
+ depends_on = [aws_eks_node_group.main]
+
+  tags = {
+    Environment = var.environment
+    Project     = var.cluster_name
+  }
 }
 
 resource "aws_iam_role" "eks_nodes" {
@@ -210,6 +235,19 @@ resource "aws_eks_addon" "ebs_csi_driver" {
     aws_eks_node_group.main,
     aws_iam_role_policy_attachment.ebs_csi
   ]
+}
+
+
+resource "aws_kms_key" "eks_secrets" {
+  description = "KMS key for encryption"
+  deletion_window_in_days = 7
+  enable_key_rotation = true
+}
+
+resource "aws_kms_alias" "eks_secrets" {
+name = "alias/cloudops-dev-secrets"
+target_key_id = aws_kms_key.eks_secrets.id
+  
 }
 
 

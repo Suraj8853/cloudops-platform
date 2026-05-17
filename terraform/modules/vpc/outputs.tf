@@ -18,3 +18,8 @@ output "nat_gateway_id" {
   description = "nat gateway id"
   value       = aws_nat_gateway.main.id
 }
+
+output "vpc_cidr" {
+  description = "CIDR block of the VPC"
+  value       = aws_vpc.main.cidr_block
+}

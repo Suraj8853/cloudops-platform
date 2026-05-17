@@ -22,3 +22,18 @@ variable "aws_account_id" {
   description = "AWS account id "
   type = string
 }
+
+variable "node_role_name" {
+  description = "EKS node group IAM role name"
+  type        = string
+}
+
+variable "aws_region" {
+  description = "AWS region"
+  type        = string
+}
+
+variable "oidc_id" {
+  description = "EKS OIDC provider ID"
+  type        = string
+}
